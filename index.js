@@ -1,17 +1,17 @@
-// const express = require('express');
-var express = require('express')
-var cors = require('cors')
+const express = require('express');
+const bodyParser = require('body-parser');
+var cors = require('cors');
 var app = express()
 const port = 5000;
-
+app.use(bodyParser.json());
 app.use(cors())
 
+
 const MongoClient = require('mongodb').MongoClient;
-const password = 'pTZK5hQtvF3D2Dxd';
+const password = 'pTZK5hQtvF3D2Dxd';           //It should be hide. But sorry for my time limitation .
 const uri = "mongodb+srv://internUser:pTZK5hQtvF3D2Dxd@cluster0.f3vnz.mongodb.net/interndb?retryWrites=true&w=majority";
 const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true });
 
-// const app = express();
 
 app.get('/', (req, res) => {
     res.send('hello I am working')
@@ -22,10 +22,17 @@ client.connect(err => {
     app.post('/addUser', (req, res) => {
         const user = req.body;
         console.log(user);
-        // collection.insertOne(user)
-        // .then(result => {
-        //     console.log(result);
-        // })
+        collection.insertOne(user)
+            .then(result => {
+                console.log(result);
+            })
+    })
+
+    app.get('/user', (req, res) => {
+        collection.find({})
+            .toArray((err, documents) => {
+                res.send(documents);
+            })
     })
 });
 
